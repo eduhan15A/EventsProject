@@ -1,0 +1,6 @@
+<% if(data=="/") data="/index" %>
+    <% if(data!="/" && data!="/proceso" && data!="/eventos" && data!="/tickets" ) data="/index" %>
+        <%- include('templates/head') %>
+            <%- include('templates/menu') %>
+                <%- include('partials'+data) %>
+                    <%- include('templates/footer') %>
