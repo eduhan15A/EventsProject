@@ -1,0 +1,200 @@
+.banner {
+    position: relative;
+    z-index: -1000;
+    margin-top: 30px;
+
+}
+
+.banner_mensaje {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    color: #fff;
+    text-align: center;
+    transform: translateX(-50%) translateY(-50%);
+    width: 90%;
+    background-color: #000;
+    filter: alpha(opacity=80);
+    opacity: 0.8;
+}
+
+a:link {
+    color: white;
+}
+
+/* visited link */
+
+a:visited {
+    color: green;
+}
+
+/* mouse over link */
+
+a:hover {
+    color: hotpink;
+}
+
+/* selected link */
+
+a:active {
+    color: blue;
+}
+
+.main {
+    background-color: #f2f2f2;
+
+}
+
+.color1 {
+    background-color: #34495e;
+    color: white;
+    padding: 25px;
+
+}
+
+.color2 {
+    background-color: #4ABEF3;
+}
+
+.info {
+    margin-top: 20px;
+}
+
+.rectangle {
+
+    margin-left: 0px;
+    border-style: solid;
+    border-color: white;
+}
+
+.cursos_descripcion {
+    position: absolute;
+    top: 0;
+    left: 15px;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.5);
+    width: 60%;
+    height: 50%;
+    padding: 5px;
+
+}
+
+
+.section__titulo {
+    text-align: center;
+    font-size: 40px;
+    color: #b30000;
+}
+
+/* ESTILOS DEL FOOTER*/
+
+.footer {
+    background: #c0392b;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+}
+
+.footer .social [class^="icon-"] {
+    display: inline-block;
+    color: #333;
+    text-decoration: none;
+    font-size: 30px;
+    padding: 10px;
+    background: white;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    line-height: 40px;
+}
+
+
+/*-----------------------------------ESTILOS CSS NAVBAR BOOTSRAP-----------------------------*/
+
+/* navbar */
+
+.navbar-default {
+    background-color: #e74c3c;
+    border-color: #c0392b;
+}
+
+/* Title */
+
+.navbar-default .navbar-brand {
+    color: #fff;
+}
+
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+    color: #ffbbbc;
+}
+
+/* Link */
+
+.navbar-default .navbar-nav > li > a {
+    color: #fff;
+}
+
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+    color: #ccc;
+}
+
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+    color: #eee;
+    background-color: #c0392b;
+}
+
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:hover,
+.navbar-default .navbar-nav > .open > a:focus {
+    color: #555;
+    background-color: #D5D5D5;
+}
+
+/* Caret */
+
+.navbar-default .navbar-nav > .dropdown > a .caret {
+    border-top-color: #fff;
+    border-bottom-color: #fff;
+}
+
+.navbar-default .navbar-nav > .dropdown > a:hover .caret,
+.navbar-default .navbar-nav > .dropdown > a:focus .caret {
+    border-top-color: #333;
+    border-bottom-color: #333;
+}
+
+.navbar-default .navbar-nav > .open > a .caret,
+.navbar-default .navbar-nav > .open > a:hover .caret,
+.navbar-default .navbar-nav > .open > a:focus .caret {
+    border-top-color: #555;
+    border-bottom-color: #555;
+}
+
+/* Mobile version */
+
+.navbar-default .navbar-toggle {
+    border-color: #DDD;
+}
+
+.navbar-default .navbar-toggle:hover,
+.navbar-default .navbar-toggle:focus {
+    background-color: #DDD;
+}
+
+.navbar-default .navbar-toggle .icon-bar {
+    background-color: #CCC;
+}
+
+@media (max-width: 767px) {
+    .navbar-default .navbar-nav .open .dropdown-menu > li > a {
+        color: #fff;
+    }
+    .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,
+    .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+        color: #333;
+    }
+}
