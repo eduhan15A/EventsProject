@@ -1,0 +1,31 @@
+<br><br><br>
+<section class="cursos row">
+    <div class="container">
+
+        <% contactos.forEach(function(contacto){%>
+            <% var obj = JSON.parse( JSON.stringify(contacto)); %>
+                <article class="cursos_info col-md-6">
+                    <a href="compraTickets?id=<%=obj._id %>"><img class='img-fluid' width="400" height="400" class="img-responsive" alt="" src='img/eventos/<%=obj.image %>' /></a>
+                    <div class="cursos_descripcion">
+                        <h2>
+                            <%=obj.name %>
+                        </h2>
+                        <p>
+                            <%=obj.place %>
+                                <%=obj.date %>
+                                    <%=obj.hour %>
+                        </p>
+                    </div>
+                </article>
+
+                <% });%>
+    </div>
+    <br/><br/><br/><br/>
+
+
+
+    <br/><br/><br/><br/>
+    <script src="js/jquery.js "></script>
+
+
+</section>

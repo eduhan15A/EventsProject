@@ -1,0 +1,53 @@
+<style>
+    .container {
+        width: 100%;
+    }
+
+    .vertical-center {
+        min-height: 100%;
+        /* Fallback for browsers do NOT support vh unit */
+        min-height: 100;
+        /* These two lines are counted as one :-)       */
+        display: flex;
+        align-items: center;
+    }
+
+</style>
+<br/><br/><br/><br/>
+<div class="container text-center">
+    <div class="row">
+        <div class="col-md-2 alert alert-info">Event ID</div>
+        <div class="col-md-2 alert alert-warning">Tickets</div>
+        <div class="col-md-2 alert alert-danger">Total</div>
+        <div class="col-md-2 alert alert-success">Pay Method</div>
+        <div class="col-md-2 alert alert-info ">User</div>
+        <div class="col-md-2 alert alert-warning">Datestamp</div>
+    </div>
+    <% contactos.forEach(function(contacto){%>
+        <div class="row text-center ">
+            <% var obj = JSON.parse( JSON.stringify(contacto)); %>
+
+                <div class="col-md-2 table-bordered">
+                    <%=obj.eventID %>
+                </div>
+                <div class="col-md-2 table-bordered">
+                    <%=obj.tickets %>
+                </div>
+                <div class="col-md-2 table-bordered">
+                    <%=obj.total %>
+                </div>
+                <div class="col-md-2 table-bordered">
+                    <%=obj.payMethod %>
+                </div>
+                <div class="col-md-2 table-bordered">
+                    <%=obj.user %>
+                </div>
+                <div class="col-md-2 table-bordered">
+                    <%=obj.datestamp %>
+                </div>
+        </div>
+
+        <% });%>
+</div>
+<br/><br/><br/><br/>
+<script src="js/jquery.js "></script>

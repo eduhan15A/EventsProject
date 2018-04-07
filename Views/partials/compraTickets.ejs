@@ -1,0 +1,50 @@
+<br><br><br>
+<main>
+    <div class="container">
+        <h2 class="section__titulo">Compra tus boletos</h2>
+        <form action="ticketsPost" method="post" role="form" enctype="multipart/form-data">
+            <legend>Datos de la compra</legend>
+            <% var obj = JSON.parse( JSON.stringify(contactos)); %>
+                <div class="form-group">
+                    <label for="">Evento
+                      <input type="string" value="<%=obj.name %>" readonly class="form-control"  id="eventName" name="eventName"></label>
+                </div>
+                <div class="form-group">
+                    <label for="">
+                      <input type="hidden" value="<%=obj._id %>" hidden readonly class="form-control"  id="event" name="event"></label>
+                </div>
+
+                <div class="form-group">
+                    <label for="">Cantidad de Tickets
+                      <input type="number" onchange="updateCost()" min=1 value="1" class="form-control"  id="amount" name="amount"></label>
+                </div>
+                <div class="form-group">
+                    <label for="">TOTAL
+                      <input type="number" class="form-control" readonly value="<%=obj.cost %>"  id="total" name="total"></label>
+                </div>
+                <label for="">Método de Pago</label>
+                <div class="radio">
+                    <label><input type="radio" checked value="1" name="optradio">Tarjeta de crédito / débito</label>
+                </div>
+                <div class="radio">
+                    <label><input type="radio" value="2" name="optradio">Paypal</label>
+                </div>
+                <div class="radio">
+                    <label><input type="radio" value="3" name="optradio">Efectivo (Oxxo)</label>
+                </div>
+                <br/>
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+    </div>
+    <br><br>
+
+</main>
+
+<script>
+    function updateCost() {
+        $("#total").val(<%-contactos.cost%> * $("#amount").val());
+    }
+
+</script>

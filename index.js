@@ -9,6 +9,9 @@ var path = require("path");
 const plantilla = require("ejs");
 const conekta = require("conekta")
 
+const mongoose = require('mongoose')
+mongoose.connect("mongodb://localhost/eventsDB")
+
 conekta.api_key = 'key_ZxvvZN5xKq9Nktf7QUMfvg';
 conekta.locale = 'es';
 conekta.api_version = "2.0.0";
@@ -18,6 +21,34 @@ app.use(expressLib.static(__dirname + '/public'))
 app.use(expressLib.static(__dirname + '/Views'))
 app.set('views', __dirname + '/Views');
 app.set("view engine", "ejs");
+
+mongoose.connect("mongodb://localhost/eventsDB")
+
+ticketModel = new mongoose.Schema({
+    eventID: String,
+    tickets: String,
+    total: String,
+    payMethod: String,
+    user: String,
+    datestamp: String
+}, {
+    collection: 'tickets'
+});
+
+eventModel = new mongoose.Schema({
+    name: String,
+    cost: String,
+    date: String,
+    place: String,
+    image: String
+}, {
+    collection: 'events'
+});
+
+
+var ticketModel = mongoose.model('tickets', ticketModel);
+var eventModel = mongoose.model('events', eventModel);
+
 
 
 /*app.get('/lista', (req, res) => {
@@ -36,12 +67,235 @@ app.set("view engine", "ejs");
 
 });*/
 
+
+app.get('/compraTickets', (req, res) => {
+    var id = req.query.id;
+    console.log("Info del ticket: " + id);
+    eventModel.findOne({
+        _id: id
+    }, function (err, docs) {
+        console.log(docs);
+        console.log("going to lista Tickets")
+        res.render("page", {
+            data: "/compraTickets",
+            contactos: docs
+        });
+    });
+
+});
+
+
+app.get('/listaTickets', (req, res) => {
+    ticketModel.find({}, {}, {
+        sort: {
+            '_id': -1
+        }
+    }, function (err, docs) {
+        //console.log(docs);
+        console.log("going to lista Tickets")
+        res.render("page", {
+            data: "/listaTickets",
+            contactos: docs
+        });
+    });
+});
+
+app.get('/listaEventos', (req, res) => {
+    eventModel.find({}, {}, {
+        sort: {
+            '_id': -1
+        }
+    }, function (err, docs) {
+        //console.log(docs);
+        console.log("going to lista Eventos")
+        res.render("page", {
+            data: "/listaEventos",
+            contactos: docs
+        });
+    });
+});
+
+app.get('/nextEvents', (req, res) => {
+    eventModel.find({}, {}, {
+        sort: {
+            '_id': -1
+        }
+    }, function (err, docs) {
+        //console.log(docs);
+        console.log("going to lista Eventos")
+        res.render("page", {
+            data: "/nextEvents",
+            contactos: docs
+        });
+    });
+});
+
+
 app.get('*', (req, response) => {
 
     response.render("page", {
         data: req.url
     });
 });
+
+
+
+app.post('/creaEventoPost', (req, res) => {
+    var form = new multiparty.Form();
+    var data = {
+        data: {}
+    };
+
+    form.parse(req, function (err, fields, files) {
+        if (err) {
+            console.log(err);
+            data.data.err = err;
+            res.render("postdata2", data);
+            return;
+        }
+
+        //No valid file?
+        if (!files['archivo'][0].originalFilename || files['archivo'][0].originalFilename === '') {
+            fs.unlink(files['archivo'][0].path, (err) => {
+                if (err) {
+                    console.warn(err, ' File not deleted: ' + files['archivo'][0].path);
+                }
+                console.log('Temporal file ' + files['archivo'][0].path + ' was deleted');
+            });
+            data.data.noFile = 'No valid file';
+            res.render("postContactData", data);
+            return;
+        }
+
+        //Copy uploaded file
+        var ext = /(\.[\w\d-]*)$/g.exec(files['archivo'][0].originalFilename);
+        ext ? ext = ext[0] : ext = '';
+        var filename = (new Date()).getTime() + files['archivo'][0].originalFilename;
+        console.log("filename: " + filename);
+        var fullfile = path.join(__dirname, 'public', 'img/eventos/', filename);
+        var fullfileinfo = path.join(__dirname, 'public', 'archivos', filename + '.txt');
+        fs.writeFileSync(fullfile, fs.readFileSync(files['archivo'][0].path));
+
+        //Build up info file
+        var info = '';
+        for (var i in fields) {
+            data.data[i] = fields[i];
+            info += i + ' : ' + fields[i] + '\n';
+        }
+
+        //Prepare for view
+        data.data.file = filename + ext;
+        data.data.fileInfo = filename + '.txt';
+
+        //Clean up ur dirty work
+        fs.unlink(files['archivo'][0].path, (err) => {
+            if (err) {
+                console.warn(err, ' File not deleted: ' + files['archivo'][0].path);
+            } else {
+                console.log('Temporal file ' + files['archivo'][0].path + ' was deleted');
+                console.log('Price ' + fields["monto"])
+
+            }
+        });
+
+        var schemaAux = {
+            name: data.data["name"],
+            cost: data.data["cost"],
+            date: data.data["date"] + " " + data.data["time"],
+            place: data.data["place"],
+            image: filename
+        };
+
+        var events = new eventModel(schemaAux);
+        events.save(function (err) {
+            //  console.log(events);
+            eventModel.find({}, {}, {
+                sort: {
+                    '_id': -1
+                }
+            }, function (err, docs) {
+                console.log(docs);
+                console.log("going to lista Eventos")
+                res.render("page", {
+                    data: "/listaEventos",
+                    contactos: docs
+                });
+            });
+        });
+
+
+    });
+});
+
+
+
+app.post('/ticketsPost', (req, res) => {
+    var form = new multiparty.Form();
+    var data = {
+        data: {}
+    };
+
+    form.parse(req, function (err, fields, files) {
+        if (err) {
+            console.log(err);
+            data.data.err = err;
+            res.render("postdata2", data);
+            return;
+        }
+
+        var info = '';
+        for (var i in fields) {
+            data.data[i] = fields[i];
+            info += i + ' : ' + fields[i] + '\n';
+            console.log(fields[i]);
+        }
+
+
+        var d = new Date();
+        var cDate =
+
+            d.getFullYear() + "/" +
+            ("00" + (d.getMonth() + 1)).slice(-2) + "/" +
+            ("00" + d.getDate()).slice(-2) + " " +
+            ("00" + d.getHours()).slice(-2) + ":" +
+            ("00" + d.getMinutes()).slice(-2) + ":" +
+            ("00" + d.getSeconds()).slice(-2);
+
+
+
+        var schemaAux = {
+            eventID: data.data["event"],
+            tickets: data.data["amount"],
+            total: data.data["total"],
+            payMethod: data.data["optradio"],
+            user: "Eduardo",
+            datestamp: cDate
+        };
+
+        var tickets = new ticketModel(schemaAux);
+        tickets.save(function (err) {
+            console.log(tickets);
+            ticketModel.find({}, {}, {
+                sort: {
+                    '_id': -1
+                }
+            }, function (err, docs) {
+                console.log(docs);
+                console.log("going to lista Tickets")
+                res.render("page", {
+                    data: "/listaTickets",
+                    contactos: docs
+                });
+            });
+        });
+
+
+        //console.log(data.data["event"]);
+
+    }); //Form.Parse
+
+});
+
 
 app.post('/postContactData', (req, res) => {
     var form = new multiparty.Form();

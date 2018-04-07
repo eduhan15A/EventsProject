@@ -1,0 +1,39 @@
+<br><br><br>
+<main>
+    <div class="container">
+        <h2 class="section__titulo">Crea un evento</h2>
+        <form action="creaEventoPost" id="commentForm" method="post" name="commentForm" role="form" enctype="multipart/form-data">
+            <legend>Datos del Evento</legend>
+            <div class="form-group">
+                <label for="">Nombre del evento
+                      <input type="text" required class="form-control" value=""  id="name" name="name"></label>
+            </div>
+            <div class="form-group">
+                <label for="">Costo del evento
+                      <input type="number" required value="1" class="form-control"  id="cost" name="cost"></label>
+            </div>
+            <div class="form-group">
+                <label for="">Fecha
+                      <input type="date" required value="" class="form-control"  id="date" name="date"></label>
+            </div>
+            <div class="form-group">
+                <label for="">Hora
+                      <input type="time" required value="" class="form-control"  id="time" name="time"></label>
+            </div>
+            <div class="form-group">
+                <label for="">Lugar del evento
+                      <input type="text" required value="" class="form-control"  id="place" name="place"></label>
+            </div>
+            Poster del evento
+            <input type="file" required name="archivo">
+
+
+            <br/>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+    </div>
+    <br><br>
+
+</main>
