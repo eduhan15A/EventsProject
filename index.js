@@ -40,7 +40,15 @@ eventModel = new mongoose.Schema({
     cost: String,
     date: String,
     place: String,
-    image: String
+    image: String,
+    entradas: String,
+    fechaMaxVenta: String,
+    maxTicketsCliente: String,
+    UbicacionX: String,
+    UbicacionY: String,
+    Descripcion: String,
+    Contacto: String,
+    Politicas: String
 }, {
     collection: 'events'
 });
@@ -203,7 +211,15 @@ app.post('/creaEventoPost', (req, res) => {
             cost: data.data["cost"],
             date: data.data["date"] + " " + data.data["time"],
             place: data.data["place"],
-            image: filename
+            image: filename,
+            entradas: data.data["entradas"],
+            fechaMaxVenta: data.data["maxDate"] + " " + data.data["maxTime"],
+            maxTicketsCliente: data.data["maxEntradas"],
+            UbicacionX: data.data["xLocation"],
+            UbicacionY: data.data["yLocation"],
+            Descripcion: data.data["descripcion"],
+            Contacto: data.data["contact"],
+            Politicas: data.data["politics"]
         };
 
         var events = new eventModel(schemaAux);

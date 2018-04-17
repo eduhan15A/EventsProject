@@ -1,50 +1,116 @@
-<br><br><br>
-<main>
-    <div class="container">
-        <h2 class="section__titulo">Compra tus boletos</h2>
-        <form action="ticketsPost" method="post" role="form" enctype="multipart/form-data">
-            <legend>Datos de la compra</legend>
-            <% var obj = JSON.parse( JSON.stringify(contactos)); %>
-                <div class="form-group">
-                    <label for="">Evento
+<% var obj = JSON.parse( JSON.stringify(contactos)); %>
+
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+
+    </style>
+
+
+    <br><br><br>
+    <main>
+        <div class="container">
+
+            <h2 class="section__titulo">Compra tus boletos</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <article class="cursos_info col-md-6">
+                        <a href="compraTickets?id=<%=obj._id %>"><img class='img-fluid' width="400" height="400" class="img-responsive" alt="" src='img/eventos/<%=obj.image %>' /></a>
+                        <div class="cursos_descripcion">
+                            <h2>
+                                <%=obj.name %>
+                            </h2>
+                            <p>
+                                <%=obj.Descripcion %>
+                            </p>
+                            <br>
+                            <p>
+                                <%=obj.place %>
+                                    <%=obj.date %>
+                                        <%=obj.hour %>
+                            </p>
+                        </div>
+                    </article>
+                </div>
+                <div class="col-md-6">
+
+                    <form action="ticketsPost" method="post" role="form" enctype="multipart/form-data">
+                        <legend>Datos de la compra</legend>
+                        <div class="form-group">
+                            <label for="">Evento
                       <input type="string" value="<%=obj.name %>" readonly class="form-control"  id="eventName" name="eventName"></label>
-                </div>
-                <div class="form-group">
-                    <label for="">
+                        </div>
+                        <div class="form-group">
+                            <label for="">
                       <input type="hidden" value="<%=obj._id %>" hidden readonly class="form-control"  id="event" name="event"></label>
-                </div>
+                        </div>
 
-                <div class="form-group">
-                    <label for="">Cantidad de Tickets
+                        <div class="form-group">
+                            <label for="">Cantidad de Tickets
                       <input type="number" onchange="updateCost()" min=1 value="1" class="form-control"  id="amount" name="amount"></label>
-                </div>
-                <div class="form-group">
-                    <label for="">TOTAL
+                        </div>
+                        <div class="form-group">
+                            <label for="">TOTAL
                       <input type="number" class="form-control" readonly value="<%=obj.cost %>"  id="total" name="total"></label>
+                        </div>
+                        <label for="">Método de Pago</label>
+                        <div class="radio">
+                            <label><input type="radio" checked value="1" name="optradio">Tarjeta de crédito / débito</label>
+                        </div>
+                        <div class="radio">
+                            <label><input type="radio" value="2" name="optradio">Paypal</label>
+                        </div>
+                        <div class="radio">
+                            <label><input type="radio" value="3" name="optradio">Efectivo (Oxxo)</label>
+                        </div>
+                        <br/>
+
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+
                 </div>
-                <label for="">Método de Pago</label>
-                <div class="radio">
-                    <label><input type="radio" checked value="1" name="optradio">Tarjeta de crédito / débito</label>
-                </div>
-                <div class="radio">
-                    <label><input type="radio" value="2" name="optradio">Paypal</label>
-                </div>
-                <div class="radio">
-                    <label><input type="radio" value="3" name="optradio">Efectivo (Oxxo)</label>
-                </div>
-                <br/>
+            </div>
 
-                <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
+            <br><br>
 
-    </div>
-    <br><br>
+            <h2 class="section__titulo">Lugar del Evento</h2>
+            <hr>
 
-</main>
+            <div id="map"></div>
+            <br><br>
+            <script>
+                function initMap() {
+                    var uluru = {
+                        lat: <%-contactos.UbicacionX%>,
+                        lng: <%-contactos.UbicacionY%>
+                    };
+                    var map = new google.maps.Map(document.getElementById('map'), {
+                        zoom: 14,
+                        center: uluru
+                    });
+                    var marker = new google.maps.Marker({
+                        position: uluru,
+                        map: map
+                    });
+                }
 
-<script>
-    function updateCost() {
-        $("#total").val(<%-contactos.cost%> * $("#amount").val());
-    }
+            </script>
+            <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAPebftLQbdG9EOgJZ5KGur-yZsSIYzEu4&callback=initMap">
 
-</script>
+
+            </script>
+
+
+        </div>
+    </main>
+
+
+
+    <script>
+        function updateCost() {
+            $("#total").val(<%-contactos.cost%> * $("#amount").val());
+        }
+
+    </script>

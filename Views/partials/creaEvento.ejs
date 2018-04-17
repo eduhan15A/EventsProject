@@ -1,39 +1,281 @@
+<script src="vendors/jquery/jquery-3.2.1.min.js"></script>
+<style>
+    /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+
+    #map {
+        height: 400px;
+        width: 100%;
+    }
+
+    /* Optional: Makes the sample page fill the window. */
+
+    html,
+    body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    .controls {
+        margin-top: 10px;
+        border: 1px solid transparent;
+        border-radius: 2px 0 0 2px;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        height: 32px;
+        outline: none;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    #pac-input {
+        background-color: #fff;
+        font-family: Roboto;
+        font-size: 15px;
+        font-weight: 300;
+        margin-left: 12px;
+        padding: 0 11px 0 13px;
+        text-overflow: ellipsis;
+        width: 300px;
+    }
+
+    #pac-input:focus {
+        border-color: #4d90fe;
+    }
+
+    .pac-container {
+        font-family: Roboto;
+    }
+
+    #type-selector {
+        color: #fff;
+        background-color: #4d90fe;
+        padding: 5px 11px 0px 11px;
+    }
+
+    #type-selector label {
+        font-family: Roboto;
+        font-size: 13px;
+        font-weight: 300;
+    }
+
+    #target {
+        width: 345px;
+    }
+
+</style>
+
 <br><br><br>
 <main>
     <div class="container">
         <h2 class="section__titulo">Crea un evento</h2>
         <form action="creaEventoPost" id="commentForm" method="post" name="commentForm" role="form" enctype="multipart/form-data">
             <legend>Datos del Evento</legend>
-            <div class="form-group">
-                <label for="">Nombre del evento
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="">Nombre del evento
                       <input type="text" required class="form-control" value=""  id="name" name="name"></label>
-            </div>
-            <div class="form-group">
-                <label for="">Costo del evento
+                </div>
+                <div class="form-group">
+                    <label for="">Costo del evento
                       <input type="number" required value="1" class="form-control"  id="cost" name="cost"></label>
-            </div>
-            <div class="form-group">
-                <label for="">Fecha
+                </div>
+                <div class="form-group">
+                    <label for="">Fecha
                       <input type="date" required value="" class="form-control"  id="date" name="date"></label>
-            </div>
-            <div class="form-group">
-                <label for="">Hora
+                </div>
+                <div class="form-group">
+                    <label for="">Hora
                       <input type="time" required value="" class="form-control"  id="time" name="time"></label>
-            </div>
-            <div class="form-group">
-                <label for="">Lugar del evento
+                </div>
+                <div class="form-group">
+                    <label for="">Lugar del evento
                       <input type="text" required value="" class="form-control"  id="place" name="place"></label>
+                </div>
+                Poster del evento
+                <input type="file" required name="archivo">
+
+                <br>
+                <div class="form-group">
+                    <label for="">Número de entradas
+                      <input type="number" required value="1" class="form-control"  id="entradas" name="entradas"></label>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="">Fecha máxima de venta de Boletos
+                      <input type="date" required value="" class="form-control"  id="date" name="maxDate"></label>
+                </div>
+                <div class="form-group">
+                    <label for="">Hora máxima de venta de boletos
+                      <input type="time" required value="" class="form-control"  id="time" name="maxTime"></label>
+                </div>
+                <div class="form-group">
+                    <label for="">Número máximo de tickets por cliente
+                      <input type="number" required value="1" class="form-control"  id="maxEntradas" name="maxEntradas"></label>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="">Descripción<br>
+                    <textarea id="descripcion" name="descripcion" cols="40" rows="5"></textarea>  
+                        </label>
+                </div>
+
+                <div class="form-group">
+                    <label for="">Contacto<br>
+                      <textarea id="contact" name="contact" cols="40" rows="5"></textarea>
+                   </label>
+                </div>
+
+                <div class="form-group">
+                    <label for="">Políticas<br>
+                       <textarea id="politics" name="politics" cols="40" rows="5"></textarea>
+                       </label>
+                </div>
+
+                <br/>
+
+                <button type="submit" class="btn btn-primary">Submit</button>
             </div>
-            Poster del evento
-            <input type="file" required name="archivo">
+            <div class="col-md-6">
+                <label for="">Ingresa la ubicación del evento<br>
+                       <input id="pac-input" class="controls" type="text" placeholder="Search Box">
+                           </label>
 
 
-            <br/>
+                <div id="map"></div>
 
-            <button type="submit" class="btn btn-primary">Submit</button>
+
+                <div class="form-group">
+                    <label for="">Ubicación en X
+                      <input type="number" readonly required value="1" class="form-control"  id="xLocation" name="xLocation"></label>
+                </div>
+
+                <div class="form-group">
+                    <label for="">Ubicación en Y
+                      <input type="number" readonly required value="1" class="form-control"  id="yLocation" name="yLocation"></label>
+                </div>
+
+            </div>
         </form>
+
+
 
     </div>
     <br><br>
 
 </main>
+
+<!-------------- Scripts --------->
+
+<script>
+    // This example adds a search box to a map, using the Google Place Autocomplete
+    // feature. People can enter geographical searches. The search box will return a
+    // pick list containing a mix of places and predicted search terms.
+
+    // This example requires the Places library. Include the libraries=places
+    // parameter when you first load the API. For example:
+    // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
+
+    function initAutocomplete() {
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: {
+                lat: 19.4248097,
+                lng: -99.1971143
+            },
+            zoom: 13,
+            mapTypeId: 'roadmap'
+        });
+
+        var inputX = document.getElementById('xLocation');
+        var inputY = document.getElementById('yLocation');
+        inputX.value = 19.4248097;
+        inputY.value = -99.1971143;
+
+
+        // Create the search box and link it to the UI element.
+        var input = document.getElementById('pac-input');
+
+        var searchBox = new google.maps.places.SearchBox(input);
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+        // Bias the SearchBox results towards current map's viewport.
+        map.addListener('bounds_changed', function() {
+            searchBox.setBounds(map.getBounds());
+        });
+
+        var markers = [];
+        // Listen for the event fired when the user selects a prediction and retrieve
+        // more details for that place.
+        searchBox.addListener('places_changed', function() {
+            var places = searchBox.getPlaces();
+
+            if (places.length == 0) {
+                return;
+            }
+
+            // Clear out the old markers.
+            markers.forEach(function(marker) {
+                marker.setMap(null);
+            });
+            markers = [];
+
+            // For each place, get the icon, name and location.
+            var bounds = new google.maps.LatLngBounds();
+            places.forEach(function(place) {
+                if (!place.geometry) {
+                    console.log("Returned place contains no geometry");
+                    return;
+                }
+                var icon = {
+                    url: place.icon,
+                    size: new google.maps.Size(71, 71),
+                    origin: new google.maps.Point(0, 0),
+                    anchor: new google.maps.Point(17, 34),
+                    scaledSize: new google.maps.Size(25, 25)
+                };
+
+                // Create a marker for each place.
+                markers.push(new google.maps.Marker({
+                    map: map,
+                    icon: icon,
+                    title: place.name,
+                    position: place.geometry.location
+                }));
+                inputX.value = markers[0].getPosition().lat();
+                inputY.value = markers[0].getPosition().lng();
+
+                if (place.geometry.viewport) {
+                    // Only geocodes have viewport.
+                    bounds.union(place.geometry.viewport);
+                } else {
+                    bounds.extend(place.geometry.location);
+                }
+            });
+            map.fitBounds(bounds);
+        });
+
+
+        /*map.addListener('center_changed', function() {
+            // 3 seconds after the center of the map has changed, pan back to the
+            // marker.
+            window.setTimeout(function() {
+
+                var inputX = document.getElementById('xLocation');
+                var inputY = document.getElementById('yLocation');
+                // alert(marker.getPosition().lat());
+                inputX.value = map.getCenter().lat();
+                inputY.value = map.getCenter().lng();
+                map.panTo(marker.getPosition());
+            }, 000);
+        });*/
+
+
+
+
+    }
+
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAPebftLQbdG9EOgJZ5KGur-yZsSIYzEu4&libraries=places&callback=initAutocomplete" async defer></script>
