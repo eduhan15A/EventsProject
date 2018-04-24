@@ -18,7 +18,7 @@
                 <div class="col-md-6">
                     <article class="cursos_info col-md-6">
                         <a href="compraTickets?id=<%=obj._id %>"><img class='img-fluid' width="400" height="400" class="img-responsive" alt="" src='img/eventos/<%=obj.image %>' /></a>
-                        <div class="cursos_descripcion">
+                        <div class="cursos_descripcion2">
                             <h2>
                                 <%=obj.name %>
                             </h2>
@@ -49,12 +49,29 @@
 
                         <div class="form-group">
                             <label for="">Cantidad de Tickets
-                      <input type="number" onchange="updateCost()" min=1 value="1" class="form-control"  id="amount" name="amount"></label>
+                      <input type="number" onchange="updateCost()" min=1 max="<%= obj.maxTicketsCliente%>" value="1" class="form-control"  id="amount" name="amount"></label>
                         </div>
                         <div class="form-group">
                             <label for="">TOTAL
                       <input type="number" class="form-control" readonly value="<%=obj.cost %>"  id="total" name="total"></label>
                         </div>
+
+                        <div class="form-group">
+                            <label for="">Nombre y Apellidos
+                      <input type="text" value="" required class="form-control"  id="userName" name="userName"></label>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="">Teléfono
+                      <input type="tel" value="" required class="form-control"  id="phone" name="phone"></label>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="">E-mail
+                      <input type="mail" value="" required  class="form-control"  id="mail" name="mail"></label>
+                        </div>
+
+
                         <label for="">Método de Pago</label>
                         <div class="radio">
                             <label><input type="radio" checked value="1" name="optradio">Tarjeta de crédito / débito</label>

@@ -1,5 +1,5 @@
-<% if(data=="/") data="/index" %>
-    <% if(data!="/" && data!="/proceso" && data!="/eventos"  && data!="/compraTickets" && data!="/nextEvents" && data!="/creaEvento" && data!="/listaTickets" && data!="/listaEventos" && data!="/tickets" && data!="/listaTickets" ) data="/index" %>
+<% if(data=="/" || data=="/index") data="/index" %>
+    <% if(data!="/" && data!="/index" && data!="/proceso" && data!="/eventos"  && data!="/compraTickets" && data!="/nextEvents" && data!="/creaEvento" && data!="/listaTickets" && data!="/listaEventos" && data!="/tickets" && data!="/listaTickets" ) data="/index" %>
         <%- include('templates/head') %>
             <%- include('templates/menu') %>
                 <%- include('partials'+data) %>

@@ -29,8 +29,10 @@ ticketModel = new mongoose.Schema({
     tickets: String,
     total: String,
     payMethod: String,
-    user: String,
-    datestamp: String
+    userName: String,
+    datestamp: String,
+    phone: String,
+    mail: String
 }, {
     collection: 'tickets'
 });
@@ -133,6 +135,37 @@ app.get('/nextEvents', (req, res) => {
         console.log("going to lista Eventos")
         res.render("page", {
             data: "/nextEvents",
+            contactos: docs
+        });
+    });
+});
+
+
+app.get('/index', (req, res) => {
+    eventModel.find({}, {}, {
+        sort: {
+            '_id': -1
+        }
+    }, function (err, docs) {
+        //console.log(docs);
+        console.log("going to lista Eventos")
+        res.render("page", {
+            data: "/index",
+            contactos: docs
+        });
+    });
+});
+
+app.get('/', (req, res) => {
+    eventModel.find({}, {}, {
+        sort: {
+            '_id': -1
+        }
+    }, function (err, docs) {
+        //console.log(docs);
+        console.log("going to lista Eventos")
+        res.render("page", {
+            data: "/index",
             contactos: docs
         });
     });
@@ -284,10 +317,74 @@ app.post('/ticketsPost', (req, res) => {
             tickets: data.data["amount"],
             total: data.data["total"],
             payMethod: data.data["optradio"],
-            user: "Eduardo",
-            datestamp: cDate
+            userName: data.data["userName"],
+            datestamp: cDate,
+            phone: data.data["phone"],
+            mail: data.data["mail"],
         };
 
+
+        conekta.Order.create({
+            "currency": "MXN",
+            "customer_info": {
+                "name": data.data["userName"] + "",
+                "phone": data.data["phone"] + "",
+                "email": data.data["mail"] + "",
+            },
+            "line_items": [{
+                "name": data.data["eventName"] + "",
+                "description": data.data["event"] + "",
+                "unit_price": data.data["total"] * 100,
+                "quantity": data.data["amount"] + "",
+                "tags": [],
+                "type": ""
+                    }]
+        }, function (err, res) {
+            if (err) {
+                console.log(err.type);
+                return;
+            }
+            console.log(res.toObject());
+        });
+
+
+        eventModel.findOne({
+            _id: data.data["event"]
+        }, function (err, doc) {
+            doc.entradas = doc.entradas - data.data["amount"];
+            doc.save();
+        });
+
+        // Restar los tickets comprados en eventos
+        /*  console.log(data.data["event"]);
+        eventModel.update({
+            _id: '5ac6fa7371af850279f7a890'
+        }, {
+            entradas: 3
+        });
+/*
+        /*   
+        
+        var query = { name: 'bourne' };
+Model.update(query, { name: 'jason bourne' }, options, callback)
+
+// is sent as
+
+Model.update(query, { $set: { name: 'jason bourne' }}, options, callback)
+        try {
+            eventModel.updateOne({
+                _id: data.data["event"]
+            }, {
+                $set: {
+                    entradas: 3
+                }
+            });
+        } catch (e) {
+            console.log(e);
+        }
+*/
+
+        //Salvar los tickets
         var tickets = new ticketModel(schemaAux);
         tickets.save(function (err) {
             console.log(tickets);
