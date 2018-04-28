@@ -86,6 +86,14 @@ app.get('/compraTickets', (req, res) => {
     }, function (err, docs) {
         console.log(docs);
         console.log("going to lista Tickets")
+
+        //   console.log("Max Entradas :" + docs["maxTicketsCliente"])
+        if (Number(docs["entradas"]) < Number(docs["maxTicketsCliente"])) {
+            console.log("entradas es mas chico que max entradas")
+
+            docs["maxTicketsCliente"] = docs["entradas"]
+        }
+
         res.render("page", {
             data: "/compraTickets",
             contactos: docs
@@ -393,12 +401,24 @@ Model.update(query, { $set: { name: 'jason bourne' }}, options, callback)
                     '_id': -1
                 }
             }, function (err, docs) {
-                console.log(docs);
-                console.log("going to lista Tickets")
+
+                /* console.log(docs);
+                 console.log("going to lista Tickets")
+                 res.render("page", {
+                     data: "/listaTickets",
+                     contactos: docs
+                 
+                 
+                 });*/
+
                 res.render("page", {
-                    data: "/listaTickets",
-                    contactos: docs
+                    data: "/compraExitosa",
+                    contactos: data
+
+
                 });
+
+
             });
         });
 

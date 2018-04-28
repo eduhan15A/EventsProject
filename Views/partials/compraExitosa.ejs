@@ -1,0 +1,59 @@
+<% var obj = JSON.parse( JSON.stringify(contactos)); %>
+    <%= obj %>
+        <style>
+            #map {
+                height: 400px;
+                width: 100%;
+            }
+
+        </style>
+
+
+        <br><br><br>
+        <main>
+            <div class="container">
+                <h2 class="section__titulo">Compra Exitosa</h2>
+                <div class="row">
+                    <div class="col-md-6">
+                        <article class="carousel-caption cursos_descripcion4">
+                            <h1>Datos de la compra</h1>
+                            <h2>
+                                Evento:
+                                <%=contactos.data["eventName"] %>
+                            </h2>
+                            <p>
+                                Usuario:
+                                <%=contactos.data["userName"] %>
+                            </p>
+                            <p>
+                                Teléfono:
+                                <%=contactos.data["phone"] %>
+                            </p>
+                            <p>
+                                eMail:
+                                <%=contactos.data["mail"] %>
+                            </p>
+
+
+                            <p>
+                                Tickets comprados:
+                                <%=contactos.data["amount"] %>
+                            </p>
+                            <p>
+                                Total de la compra: $
+                                <%=contactos.data["total"] %>
+                            </p>
+                            <br>
+
+                        </article>
+                    </div>
+
+                </div>
+
+                <br><br>
+
+
+
+
+            </div>
+        </main>
